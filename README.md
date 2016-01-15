@@ -7,7 +7,7 @@ In this GitHub repository, you find the functions applying the SONIG algorithm. 
 
 To use the SONIG toolbox, download the entire repository to your system. Then make sure that the paths to the appropriate folders are added to Matlab. It may be wise to walk through the files in the main directory. These are files applying the toolbox to sample problems.
 
-## Setting up the SONIG object
+## Setting up a SONIG object
 
 To start using the SONIG toolbox in your Matlab code, first you will have to define a hyperparameter object. This is an object with four parameters:
 - `lx`: The length scales for the input. This should be a vector of `dx` high and 1 wide, with `dx` the number of input dimensions. (Optionally, it can also be `dx` high and `dy` wide, if you want to use different input length scales for each output direction.)
@@ -15,6 +15,13 @@ To start using the SONIG toolbox in your Matlab code, first you will have to def
 - `ly`: The length scales for the output. This should be a vector of `dy` high and 1 wide.
 - `sy`: The noise length scales (standard deviations) for the output. This should be a vector of `dy` high and 1 wide.
 
+So an example of code that sets this up, for `dx = 3` and `dy = 2`, is
+```
+hyp.lx = [1;1;0.1];
+hyp.sx = 0.1*hyp.lx;
+hyp.ly = [10;20];
+hyp.sy = [0.1;0.1];
+```
 Once a hyperparameter object is set up in this way, you can create a SONIG object using
 ```
 sonig = createSONIG(hyperparameters);
