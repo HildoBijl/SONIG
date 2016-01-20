@@ -17,10 +17,10 @@ To start using the SONIG toolbox in your Matlab code, first you will have to def
 
 So an example of code that sets this up, for `dx = 3` and `dy = 2`, is
 ```
-hyp.lx = [1;1;0.1];
-hyp.sx = 0.1*hyp.lx;
-hyp.ly = [10;20];
-hyp.sy = [0.1;0.1];
+hyperparameters.lx = [1;1;0.1];
+hyperparameters.sx = 0.1*hyperparameters.lx;
+hyperparameters.ly = [10;20];
+hyperparameters.sy = [0.1;0.1];
 ```
 Once a hyperparameter object is set up in this way, you can create a SONIG object using
 ```
