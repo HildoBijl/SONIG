@@ -18,7 +18,7 @@ if size(ym,2) ~= 1
 	error('The tuneHyperparameters function was called with invalid input. The ym parameter should be a column vector. However, the given ym parameter did not have length 1 in the horizontal direction.');
 end
 if size(ym,1) ~= nm
-	error('The tuneHyperparameters function was called with invalid input. According to the xm parameter, there are ',num2str(nm),' input points, but the ym vector does not have this height.');
+	error(['The tuneHyperparameters function was called with invalid input. According to the xm parameter, there are ',num2str(nm),' input points, but the ym vector does not have this height.']);
 end
 
 % We set up some settings.
