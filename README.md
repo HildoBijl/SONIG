@@ -1,5 +1,5 @@
 # SONIG
-Here you find the Matlab source code for the SONIG algorithm: Sparse Online Noisy-Input Gaussian process regression.
+Here you find the Matlab source code for the SONIG algorithm: Sparse Online Noisy-Input Gaussian process regression. You can find the paper I wrote on it through [arXiv](https://arxiv.org/abs/1601.08068). For a full introduction into Gaussian process regression, including the SONIG algorithm, you can read my [Ph.D. thesis](http://hildobijl.com/Downloads/GPRT.pdf), available through my [personal website](http://hildobijl.com/Research.php).
 
 ## Setting up the SONIG toolbox
 
