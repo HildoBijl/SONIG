@@ -10,8 +10,8 @@ end
 np = size(xu,2); % We calculate the number of points to be added.
 
 % We walk through the output dimensions to update the Kuu, Kuui and fu distribution for each of them.
-diff1 = repmat(permute(xu,[3,2,1]),np,1,1) - repmat(permute(xu,[2,3,1]),1,np,1); % This is the difference matrix for xu with itself, to calculate the addition Kpp, with the subscript p denoting the new points.
-diff2 = repmat(permute(xu,[3,2,1]),sonig.nu,1,1) - repmat(permute(sonig.Xu,[2,3,1]),1,np,1); % This is the difference matrix for xu with Xu, to calculate the addition Kup.
+diff1 = repmat(permute(xu,[3,2,1]),[np,1,1]) - repmat(permute(xu,[2,3,1]),[1,np,1]); % This is the difference matrix for xu with itself, to calculate the addition Kpp, with the subscript p denoting the new points.
+diff2 = repmat(permute(xu,[3,2,1]),[sonig.nu,1,1]) - repmat(permute(sonig.Xu,[2,3,1]),[1,np,1]); % This is the difference matrix for xu with Xu, to calculate the addition Kup.
 for i = 1:sonig.dy
 	% We calculate covariance matrices that we need to add.
 	Kpp = sonig.hyp.ly(i)^2*exp(-1/2*sum((diff1./repmat(permute(sonig.hyp.lx(:,i),[2,3,1]),np,np,1)).^2,3));

@@ -23,12 +23,12 @@ end
 if nargout >= 3
 	postStd = zeros(nt, sonig.dy); % We set up space for the posterior standard deviation vectors, but only if it was actually asked for.
 end
-diff1 = repmat(permute(xt,[3,2,1]),nt,1,1) - repmat(permute(xt,[2,3,1]),1,nt,1); % This is the difference matrix for trialInput with itself, to calculate the matrix Ktt, with the subscript t denoting the trial input points.
-diff2 = repmat(permute(xt,[3,2,1]),sonig.nu,1,1) - repmat(permute(sonig.Xu,[2,3,1]),1,nt,1); % This is the difference matrix for trialInput with Xu, to calculate the matrix Kut.
+diff1 = repmat(permute(xt,[3,2,1]),[nt,1,1]) - repmat(permute(xt,[2,3,1]),[1,nt,1]); % This is the difference matrix for trialInput with itself, to calculate the matrix Ktt, with the subscript t denoting the trial input points.
+diff2 = repmat(permute(xt,[3,2,1]),[sonig.nu,1,1]) - repmat(permute(sonig.Xu,[2,3,1]),[1,nt,1]); % This is the difference matrix for trialInput with Xu, to calculate the matrix Kut.
 for i = 1:sonig.dy
 	% We calculate covariance matrices that we need to add.
-	Ktt = sonig.hyp.ly(i)^2*exp(-1/2*sum((diff1./repmat(permute(sonig.hyp.lx(:,i),[2,3,1]),nt,nt,1)).^2,3));
-	Kut = sonig.hyp.ly(i)^2*exp(-1/2*sum((diff2./repmat(permute(sonig.hyp.lx(:,i),[2,3,1]),sonig.nu,nt,1)).^2,3));
+	Ktt = sonig.hyp.ly(i)^2*exp(-1/2*sum((diff1./repmat(permute(sonig.hyp.lx(:,i),[2,3,1]),[nt,nt,1])).^2,3));
+	Kut = sonig.hyp.ly(i)^2*exp(-1/2*sum((diff2./repmat(permute(sonig.hyp.lx(:,i),[2,3,1]),[sonig.nu,nt,1])).^2,3));
 	Ktu = Kut';
 	
 	% We now calculate the posterior distributions for the output directions.

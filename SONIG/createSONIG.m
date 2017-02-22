@@ -54,7 +54,7 @@ if size(hyp.ly,2) ~= 1 || size(hyp.sy,1) ~= sonig.dy || size(hyp.sy,2) ~= 1
 end
 % If the user gave lx as a vector, instead of an array, then we assume that he assumes that the length parameters are the same for every output. So we just repeat the vector into a matrix.
 if size(hyp.lx,2) == 1
-	hyp.lx = repmat(hyp.lx, 1, sonig.dy);
+	hyp.lx = repmat(hyp.lx, [1, sonig.dy]);
 end
 
 % We set up matrices of inducing input points and their corresponding output distributions for each output.
