@@ -291,13 +291,15 @@ end
 
 % Finally, we evaluate the results. For this, we get rid of the worst parts of the results of each algorithm.
 disp('We are done! Results are as follows for the various methods. (Note that the order is different from the order in the paper.)');
-disp('	MSE		Mean var.	Ratio');
-partUsed = 0.9; % Which part of the measurements do we use? (The remainder, being the worst experiments, will be thrown out.)
-resSorted = sort(res, 3, 'ascend'); % We sort all the results, so that it becomes easy to select the best 90%.
-result = mean(resSorted(:,1:2,1:partUsed*numIterations),3);
+disp('	MSE		Mean var.	Ratio	(The MSE and Mean var have been multiplied by 1000 for visibility.)');
+result = mean(res(:,1:2,:),3);
 disp([result*1e3,result(:,1)./result(:,2)]); % We show the results. We multiply the errors by a thousand to make the numbers more visible in Matlab.
 
-%% With this script, we can plot the result of a certain sample from the script above.
+% save('ComparisonScriptExperiments');
+
+%% With this script, we can plot the result of a certain sample from the script above. We can also load in earlier data.
+
+% load('ComparisonScriptExperiments');
 
 % Which sample (or counter number) should we plot?
 sample = 1;

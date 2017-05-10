@@ -171,3 +171,63 @@ legend([ftrue, fSISOG, fNLARX], 'Real measurements', 'SISOG predictions', 'NLARX
 axis([0,7.5,-80,120]);
 xlabel('Time [s]');
 ylabel('Force [N]');
+%% Out of curiosity, we also apply the exact same method - training the NARX function - for regular GP and the NIGP method. First up is GP.
+
+% We set up the measurement matrix and vector.
+X = [ze.u(1:end-3)';ze.u(2:end-2)';ze.u(3:end-1)';ze.y(3:end-1)'];
+yr = [ze.y(4:end)];
+
+% We apply training of the GP.
+diff = repmat(permute(X,[3,2,1]),size(X,2),1) - repmat(permute(X,[2,3,1]),1,size(X,2)); % This is matrix containing differences between input points. We have rearranged things so that indices 1 and 2 represent the numbers of vectors, while index 3 represents the element within the vector.
+K = hyp.ly^2*exp(-1/2*sum(diff.^2./repmat(permute(hyp.lx.^2,[3,2,1]),size(X,2),size(X,2)), 3)); % This is the covariance matrix. It contains the covariances of each combination of points.
+Sfm = hyp.sy^2*eye(length(yr)); % This is the noise covariance matrix.
+beta = (K+Sfm)\yr;
+
+% We now run a simulation.
+xs = [ze.u(end-2);ze.u(end-1);ze.u(end);ze.y(end)];
+res = zeros(size(zv.y));
+for i = 1:length(zv.u)
+	Ks = hyp.ly^2*exp(-1/2*sum((repmat(xs,1,size(X,2)) - X).^2./repmat(hyp.lx.^2,1,size(X,2)),1));
+	ys = Ks*beta;
+	res(i) = ys;
+	xs = [xs(2);xs(3);zv.u(i);ys];
+end
+
+% And we analyze the data.
+err = zv.y - res;
+dataFit = 100*(1-norm(err)/norm(zv.y-mean(zv.y)));
+RMSE = sqrt(mean(err.^2));
+disp(['The GP algorithm gave a fit of ',num2str(dataFit),'%. The RMSE was ',num2str(RMSE),'.']);
+
+%% And we do the same for the NIGP method.
+
+% We set up the training. This could take a while.
+seard = log([hyp.lx;hyp.ly;hyp.sy]);
+lsipn = log(hyp.sx);
+tic;
+disp('Starting the NIGP training. (This may take five minutes or so.)');
+[model, nigp] = trainNIGP(permute(X,[2,1]),yr,-500,1,seard,lsipn); % You can put this in the evalc function to suppress output.
+
+% We extract the derived settings and perform training.
+lx = exp(model.seard(1:4,1));
+lf = exp(model.seard(5,1));
+sfm = exp(model.seard(6,1));
+sxm = exp(model.lsipn);
+K = lf^2*exp(-1/2*sum(diff.^2./repmat(permute(lx.^2,[3,2,1]),size(X,2),size(X,2)), 3)); % This is the covariance matrix. It contains the covariances of each combination of points.
+beta = (K + sfm^2*eye(size(X,2)) + diag(model.dipK))\yr;
+
+% We run the simulation.
+xs = [ze.u(end-2);ze.u(end-1);ze.u(end);ze.y(end)];
+res = zeros(size(zv.y));
+for i = 1:length(zv.u)
+	Ks = lf^2*exp(-1/2*sum((repmat(xs,1,size(X,2)) - X).^2./repmat(lx.^2,1,size(X,2)),1));
+	ys = Ks*beta;
+	res(i) = ys;
+	xs = [xs(2);xs(3);zv.u(i);ys];
+end
+
+% And we analyze the data.
+err = zv.y - res;
+dataFit = 100*(1-norm(err)/norm(zv.y-mean(zv.y)));
+RMSE = sqrt(mean(err.^2));
+disp(['The NIGP algorithm gave a fit of ',num2str(dataFit),'%. The RMSE was ',num2str(RMSE),'.']);
