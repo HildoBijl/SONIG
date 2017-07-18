@@ -83,7 +83,7 @@ The resulting output of the function will be the posterior distributions of the 
 
 There are two ways to make predictions. First of all, we can make predictions for deterministic input points. This is done through
 ```
-[postMean, postCov, postStd] = makeSONIGPrediction(sonig, xt);
+[postMean, postCov, postStd] = makeSonigPrediction(sonig, xt);
 ```
 For a single input point, `xt` should be a vector of size `dx` by `1`. For multiple input points, `xt` should be a matrix of size `dx` by `nt`, with `nt` the number of trial input points. In this case, the outcome will be given by three parameters.
 - `postMean` is an `nt` by `dy` matrix containing the mean vectors of all the predictions.
